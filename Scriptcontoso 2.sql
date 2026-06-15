@@ -1,33 +1,33 @@
---
---with base as (
---select c.customerkey ,
---concat(c.givenname ,' ',c.surname )
---,c.country 
---,count (distinct s.orderkey )  orders
---,sum(s.quantity *s.netprice )  revenue
---,min(s.orderdate ) first_date,
---max(s.orderdate ) last_date
---, (max(s.orderdate )-min(s.orderdate )) as period
---from sales s
---inner join customer c 
---on s.customerkey =c.customerkey 
---where s.orderdate >= to_date('2025-01-01','yyyy-mm-dd')
---and s.orderdate < to_date('2025-04-01','yyyy-mm-dd')
---group by c.customerkey  ) ,
---rfm  as (select a1.*,a1.revenue /nullif(a1.orders ,0) as avg_order
---,ntile(4)over (order by a1.last_date desc) as r_score
---,ntile(4)over (order by a1.orders  desc) as f_score
---,ntile(4)over (order by a1.revenue   desc) as m_score
---from base a1),
---mah as (
---select *,f_score+m_score+r_score as rfm_score from rfm )
---select *,
---case when mah.rfm_score >11 then 'VIP_loyaltyl'
---when mah.rfm_score >7 then 'loyal'
---when mah.rfm_score >4 then  'low_loyal'
---when mah.rfm_score <=4 then 'not_loyal'  end as loyalty 
---from mah
---
+
+with base as (
+select c.customerkey ,
+concat(c.givenname ,' ',c.surname )
+,c.country 
+count (distinct s.orderkey )  orders
+,sum(s.quantity *s.netprice )  revenue
+,min(s.orderdate ) first_date,
+max(s.orderdate ) last_date
+, (max(s.orderdate )-min(s.orderdate )) as period
+from sales s
+inner join customer c 
+on s.customerkey =c.customerkey 
+where s.orderdate >= to_date('2025-01-01','yyyy-mm-dd')
+and s.orderdate < to_date('2025-04-01','yyyy-mm-dd')
+group by c.customerkey  ) ,
+rfm  as (select a1.*,a1.revenue /nullif(a1.orders ,0) as avg_order
+,ntile(4)over (order by a1.last_date desc) as r_score
+,ntile(4)over (order by a1.orders  desc) as f_score
+,ntile(4)over (order by a1.revenue   desc) as m_score
+from base a1),
+mah as (
+select *,f_score+m_score+r_score as rfm_score from rfm )
+select *,
+case when mah.rfm_score >11 then 'VIP_loyaltyl'
+when mah.rfm_score >7 then 'loyal'
+when mah.rfm_score >4 then  'low_loyal'
+when mah.rfm_score <=4 then 'not_loyal'  end as loyalty 
+from mah
+
 with base as ( 
 select
 d."date"  
