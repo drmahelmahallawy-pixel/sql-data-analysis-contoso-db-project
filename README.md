@@ -4,6 +4,7 @@
 # SQL Data Analysis: Contoso DB Project
 Contoso SQL Data Analysis Project
 This project showcases my technical skills in SQL and Data Analysis, focusing on real-world business scenarios using the Contoso database. It demonstrates my ability to transition from pharmacy and healthcare management to data-driven decision-making.
+
 🚀 Project Overview
 This repository contains solutions to 12 modules of expert-level challenges, including:
 Data Cleaning & Exploration: Handling complex datasets and database management.
@@ -14,13 +15,15 @@ Technical Workflow: Migration from virtualized environments to native macOS work
 SQL: Advanced querying, PostgreSQL, DBeaver.
 Business Intelligence: Power BI (Dashboards & Reporting).
 Version Control: GitHub for project documentation and workflow management.
+
 👨‍💻 About Me
 I am Dr. Mahmoud Amer, a professional pharmacist transitioning into Data Analysis. I combine my background in scientific research and performance monitoring with data-driven tools to solve business challenges.
 Feel free to explore the modules and review the SQL solutions.
 
 This repository contains a comprehensive set of SQL queries analyzing the Contoso database, structured into 12 advanced analytical modules.
 
-## 📊 SQL Queries by Module
+##
+📊 SQL Queries by Module
 
 * [Module 01: Executive Dashboard](./Module-01-Executive-Dashboard.sql)
 * [Module 02: Product Analytics](./Module-02-Product-Analytics.sql)
