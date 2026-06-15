@@ -1,0 +1,23 @@
+--create index idx_name_customer on customer (givenname,surname)
+--set WORK_mem  = '512 MB'
+--create table customer_revenuea as (
+--SELECT 
+--    c.customerkey,
+--    c.givenname,
+--    c.surname,
+--    SUM(s.quantity * s.netprice) as total_revenue
+--FROM customer c
+--JOIN sales s ON c.customerkey = s.customerkey
+--GROUP BY c.customerkey, c.givenname, c.surname)
+----second step
+--SELECT *
+--from CUSTOMER_REVENUEA c
+--ORDER BY c.total_revenue DESC;
+---problem 9.2
+--explain analyze
+--select date_trunc('month',s.orderdate),
+--sum(s.netprice *s.quantity ) revenue
+--from sales s
+--WHERE s.orderdate >= '2016-01-01'
+--AND s.orderdate < '2016-07-01'
+-- group by 1

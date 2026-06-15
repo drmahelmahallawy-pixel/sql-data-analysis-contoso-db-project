@@ -1,0 +1,5 @@
+create view v_sales_current as 
+(select * from sales s 
+where s.orderdate >= to_date ('2022-01-01','yyyy-mm-dd')
+and s.orderdate < to_date ('2023-01-01','yyyy-mm-dd')
+)

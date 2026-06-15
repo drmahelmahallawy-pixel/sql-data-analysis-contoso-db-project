@@ -1,0 +1,82 @@
+-- problem 1
+--with base as 
+--(select p.categoryname , sum(s.quantity ) total_unit_sold
+--,sum(s.quantity *s.netprice ) total_revenue 
+--,count(distinct p.productkey) dist_product,
+--sum(s.quantity *s.unitcost ) total_cost
+--,round(AVG(s.netprice),2) as avg_price
+--from sales s
+--join product p
+--on s.productkey = p.productkey
+--where s.orderdate >=('2022-01-01')and s.orderdate <('2022-04-01')
+--group by p.categoryname
+--)
+--select *
+--,round((a1.total_revenue - a1.total_cost )/nullif(a1.total_revenue,0)*100,2) as profit_margin
+--from base a1
+--order by a1.total_revenue desc
+--problem 2 product order
+--select p.productname
+--,p.categoryname 
+--,p.brand 
+--, sum(s.quantity ) total_unit_sold
+--,sum(s.quantity *s.netprice ) total_revenue 
+--,round(AVG(s.netprice),2) as avg_price
+--,count(distinct s.orderkey)
+--from sales s
+--join product p
+--on s.productkey = p.productkey
+--where s.orderdate >=('2022-01-01')and s.orderdate <('2022-04-01')
+--group by p.productname,2,3
+--order by 5 desc 
+--limit 10
+--problem 2.3 product protofolio matrix
+--with base as
+--(select p.categoryname 
+--,p.productname
+--, sum(s.quantity ) total_unit_sold
+--,sum(s.quantity *s.netprice ) total_revenue
+--,sum(s.quantity *s.unitcost  ) total_cost
+--from sales s
+--join product p
+--on s.productkey = p.productkey
+--where s.orderdate >=('2022-01-01')and s.orderdate <('2022-04-01')
+--group by p.categoryname,2),
+--base2 as(
+--select * 
+--,(a1.total_revenue-a1.total_cost)/nullif(a1.total_revenue,0)*100 as margine
+--from base a1),
+--base3 as(
+--select *
+--,case  
+--	when a2.total_revenue >=100000 and a2.margine >= 50 then'star'
+--	when a2.total_revenue >=100000 and a2.margine < 50 then'cash cow'
+--	when a2.total_revenue <100000 and a2.margine >= 50 then'question mark'
+--	else 'dog'
+--end as quadrant
+--from base2 a2)
+--select a3.quadrant,count (a3.productname ) product_count
+--from base3 a3 
+--group by a3.quadrant 
+--problem2.4
+--with base as (select p.productname 
+--,date_trunc('year',current_date):: date  - max(s.orderdate ) days_since_last_sales
+--,sum(s.quantity ) sold_quantity
+--from sales s
+-- right join product p 
+--on s.productkey=p.productkey 
+--and s.orderdate >=('2025-10-01')and s.orderdate <('2026-01-01')
+--group by 1
+--)
+--select *
+--from base a1
+--where days_since_last_sales>90 or a1.sold_quantity <10
+--select p.productname 
+--,MIN(s.quantity)
+--,sum(s.quantity)
+--from product p 
+--left join sales s 
+--on p.productkey = s.productkey 
+--where s.orderdate >=('2025-10-01')and s.orderdate <('2026-01-01')
+--group by 1
+--order by 3

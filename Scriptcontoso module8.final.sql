@@ -1,0 +1,46 @@
+-- problem 8.1
+--select d."year"
+--,d.quarter
+--,d.monthnumber
+--,round(sum(s.quantity * s.netprice),2) revenue
+--from sales s
+--join "date" d
+--on d."date" = s.orderdate
+--and s.orderdate >= '2024-01-01'
+--group by rollup(1,2,3)
+--order by 1,2,3
+-- problem 8.2
+--select p.categoryname
+--,p.brand
+--,p.productname
+--,round(sum(s.quantity* s.netprice),2) revenue
+--from sales s
+--join product p
+--on s.productkey = p.productkey
+--and s.orderdate >= '2025-01-01'
+--group by cube(1,2,3)
+--order by 1,2
+-- problem 8.3
+--with base as (
+--    select s2.country
+--    ,s2.state
+--    ,s2.city
+--    ,round(sum(s.quantity* s.netprice),2) revenue
+--    from sales s
+--    join customer s2
+--    on s.customerkey = s2.customerkey
+--    and s.orderdate >= '2025-01-01'
+--    group by rollup(1,2,3)
+--)
+--select a1.country
+--,case
+--    when a1.state is null and a1.country is not null then 'total ' || a1.country
+--    else a1.state
+--end as state
+--,case
+--    when a1.city is null and a1.state is not null then 'total ' || a1.state
+--    else a1.city
+--end as city
+--,a1.revenue
+--from base a1
+--order by 1,2,3
