@@ -1,70 +1,70 @@
---with base as (
---select
---	sum(sl.unitprice * sl.quantity ) as total_revenue
---,
---	sum(sl.unitcost * sl.quantity ) as total_cost
---,
---	count(distinct sl.customerkey ) as customer_n
---,
---	count(distinct sl.orderkey ) as orders_n
---,
---	sum(sl.quantity) as units
---from
---	sales sl
---where
---	sl.orderdate >= to_date( '2025-01-01', 'yyyy-mm-dd')
---	and sl.orderdate < to_date( '2025-04-01', 'yyyy-mm-dd')
---),
---step2 as (
---select
---	a1.*,
---	a1.total_revenue -a1.total_cost as profit
---from
---	base a1
---)
---select
---	a2.*,
---	round(a2.total_revenue / a2.orders_n, 2) as average_order_value,
---	round(a2.profit / nullif(a2.total_revenue, 0), 2) as profit_margin
---from
---	step2 as a2
---with base as (
---select
---	date_trunc('year', sl.orderdate) as year,
---	sum(sl.unitprice * sl.quantity ) as revenue,
---	count(distinct sl.orderkey ) as order_n
---from
---	sales sl
---where
---	sl.orderdate >= to_date('2016-01-01', 'yyyy-mm-dd')
---	and sl.orderdate <to_date('2018-01-01', 'yyyy-mm-dd')
---group by
---	1
---),
---step2 as (
---select
---	a1.*,
---	lag(a1.revenue) over (order by a1."year" ) as last_year,
---	lag(a1.order_n ) over (order by a1."year" ) as l_orders
---from
---	base a1)
---select a2.*,
---a2.revenue -a2.last_year  as growth ,
---(a2.revenue-a2.last_year )/a2.last_year as growth_percent,
---a2.order_n-a2.l_orders as order_growth,
---(a2.order_n-a2.l_orders)/a2.l_orders  as order_growth_percent
---from step2 a2
---where a2.last_year is not null 
---select p.categoryname ,
---sum(s.quantity *s.netprice ) total_revenue,
---sum(s.quantity ) units_sold
---from sales s
---inner join product p 
---on p.productkey =s.productkey 
---where s.orderdate >=to_date('2025-01-01','yyyy-mm-dd')
---and s.orderdate < to_date('2025-04-01','yyyy-mm-dd')
---group by p.categoryname 
---order by total_revenue  desc
+with base as (
+select
+	sum(sl.unitprice * sl.quantity ) as total_revenue
+,
+	sum(sl.unitcost * sl.quantity ) as total_cost
+,
+	count(distinct sl.customerkey ) as customer_n
+,
+	count(distinct sl.orderkey ) as orders_n
+,
+	sum(sl.quantity) as units
+from
+	sales sl
+where
+	sl.orderdate >= to_date( '2025-01-01', 'yyyy-mm-dd')
+	and sl.orderdate < to_date( '2025-04-01', 'yyyy-mm-dd')
+),
+step2 as (
+select
+	a1.*,
+	a1.total_revenue -a1.total_cost as profit
+from
+	base a1
+)
+select
+	a2.*,
+	round(a2.total_revenue / a2.orders_n, 2) as average_order_value,
+	round(a2.profit / nullif(a2.total_revenue, 0), 2) as profit_margin
+from
+	step2 as a2
+with base as (
+select
+	date_trunc('year', sl.orderdate) as year,
+	sum(sl.unitprice * sl.quantity ) as revenue,
+	count(distinct sl.orderkey ) as order_n
+from
+	sales sl
+where
+	sl.orderdate >= to_date('2016-01-01', 'yyyy-mm-dd')
+	and sl.orderdate <to_date('2018-01-01', 'yyyy-mm-dd')
+group by
+	1
+),
+step2 as (
+select
+	a1.*,
+	lag(a1.revenue) over (order by a1."year" ) as last_year,
+	lag(a1.order_n ) over (order by a1."year" ) as l_orders
+from
+	base a1)
+select a2.*,
+a2.revenue -a2.last_year  as growth ,
+(a2.revenue-a2.last_year )/a2.last_year as growth_percent,
+a2.order_n-a2.l_orders as order_growth,
+(a2.order_n-a2.l_orders)/a2.l_orders  as order_growth_percent
+from step2 a2
+where a2.last_year is not null 
+select p.categoryname ,
+sum(s.quantity *s.netprice ) total_revenue,
+sum(s.quantity ) units_sold
+from sales s
+inner join product p 
+on p.productkey =s.productkey 
+where s.orderdate >=to_date('2025-01-01','yyyy-mm-dd')
+and s.orderdate < to_date('2025-04-01','yyyy-mm-dd')
+group by p.categoryname 
+order by total_revenue  desc
 with base as (
 select c.customerkey ,
 concat(c.givenname ,' ',c.surname )
